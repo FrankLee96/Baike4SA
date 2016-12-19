@@ -1,42 +1,43 @@
-package com.ar.lee.baikeapplication.entrydetail;
+package com.ar.lee.baikeapplication.entrycomment;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.ar.lee.baikeapplication.R;
-import com.ar.lee.baikeapplication.data.Entry;
+import com.ar.lee.baikeapplication.data.EntryComment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EntryDetailFragment.OnFragmentInteractionListener} interface
+ * {@link EntryCommentFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EntryDetailFragment#newInstance} factory method to
+ * Use the {@link EntryCommentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EntryDetailFragment extends Fragment implements EntryDetailContract.View{
-
-    private EntryDetailContract.Presenter mPresenter;
+public class EntryCommentFragment extends Fragment implements EntryCommentContract.View{
 
     private OnFragmentInteractionListener mListener;
 
-    private Entry mEntry;
+    private EntryCommentContract.Presenter mPresenter;
 
-    //widgets
-    private TextView descriptionTextView;
+    private RecyclerView commentRecyclerView;
 
-    public EntryDetailFragment() {
+    public EntryCommentFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void setPresenter(EntryDetailContract.Presenter presenter) {
+    public void setPresenter(EntryCommentContract.Presenter presenter) {
         this.mPresenter = presenter;
     }
 
@@ -44,11 +45,11 @@ public class EntryDetailFragment extends Fragment implements EntryDetailContract
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment EntryDetailFragment.
+     * @return A new instance of fragment EntryCommentFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EntryDetailFragment newInstance() {
-        EntryDetailFragment fragment = new EntryDetailFragment();
+    public static EntryCommentFragment newInstance() {
+        EntryCommentFragment fragment = new EntryCommentFragment();
         return fragment;
     }
 
@@ -67,22 +68,22 @@ public class EntryDetailFragment extends Fragment implements EntryDetailContract
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return initViews(inflater.inflate(R.layout.fragment_entry_detail, container, false));
+        return initViews(inflater.inflate(R.layout.fragment_entry_comment, container, false));
     }
 
     private View initViews(View fragment){
-        descriptionTextView = (TextView) fragment.findViewById(R.id.entry_detail_description);
+        commentRecyclerView = (RecyclerView) fragment.findViewById(R.id.entry_comment_list);
+        List<EntryComment> list = new ArrayList<>();
+        list.add(new EntryComment());
+        list.add(new EntryComment());
+        list.add(new EntryComment());
+        CommentListAdapter adapter = new CommentListAdapter(getContext(), list);
+        commentRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        commentRecyclerView.setAdapter(adapter);
+        commentRecyclerView.addItemDecoration(new CommentListDecoration(getContext(), CommentListDecoration.VERTICAL_LIST));
 
         return fragment;
-    }
-
-    @Override
-    public void showEntryInf(Entry entry) {
-        mEntry = entry;
-
-        ((EntryDetailActivity)getActivity()).setActionBarTitle(entry.getTitle());
-        //设置正文
-        descriptionTextView.setText(entry.getDescription());
     }
 
     // TODO: Rename method, update argument and hook method into UI event

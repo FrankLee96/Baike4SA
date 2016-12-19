@@ -3,14 +3,21 @@ package com.ar.lee.baikeapplication.entrydetail;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.ar.lee.baikeapplication.R;
+import com.ar.lee.baikeapplication.addentry.AddEntryFragment;
 import com.ar.lee.baikeapplication.util.ActivityUtils;
 
 public class EntryDetailActivity extends AppCompatActivity {
+
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +25,9 @@ public class EntryDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_entry_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -37,5 +47,37 @@ public class EntryDetailActivity extends AppCompatActivity {
         }
 
         new EntryDetailPresenter(entryDetailFragment);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_entry_detail_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_entry_detail_edit:
+                //TODO: go to edit activity
+                break;
+
+            case R.id.action_entry_detail_comment:
+                //TODO: go to comment activity
+                break;
+        }
+
+        return false;
+    }
+
+    public void setActionBarTitle(String title){
+        mActionBar.setTitle(title);
     }
 }

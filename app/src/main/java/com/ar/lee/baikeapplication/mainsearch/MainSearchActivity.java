@@ -1,8 +1,10 @@
 package com.ar.lee.baikeapplication.mainsearch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ar.lee.baikeapplication.R;
+import com.ar.lee.baikeapplication.addentry.AddEntryActivity;
 import com.ar.lee.baikeapplication.util.ActivityUtils;
 
 public class MainSearchActivity extends AppCompatActivity
@@ -26,12 +29,15 @@ public class MainSearchActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainSearchActivity.this, AddEntryActivity.class);
+                startActivity(intent);
             }
         });
 
