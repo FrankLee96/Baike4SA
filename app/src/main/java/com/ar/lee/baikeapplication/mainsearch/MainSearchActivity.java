@@ -3,21 +3,22 @@ package com.ar.lee.baikeapplication.mainsearch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ar.lee.baikeapplication.R;
 import com.ar.lee.baikeapplication.addentry.AddEntryActivity;
 import com.ar.lee.baikeapplication.util.ActivityUtils;
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 public class MainSearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,19 +30,49 @@ public class MainSearchActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainSearchActivity.this, AddEntryActivity.class);
+                Intent intent = new Intent(MainSearchActivity.this,AddEntryActivity.class);
                 startActivity(intent);
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        FloatingSearchView mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
+        mSearchView.attachNavigationDrawerToMenuButton(drawer);
+
+        final MainSearchFragment  mainSearchFragment = MainSearchFragment.newInstance();
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                            mainSearchFragment, R.id.content_main_search);
+        final MainSearchPresenter presenter = new MainSearchPresenter(mainSearchFragment);
+        //按下键盘的搜索键时调用
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+            @Override
+            public void onSearchAction(String currentQuery) {
+                Log.d("query",currentQuery);
+                presenter.Query(currentQuery);
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //检测到搜索框的文字清空时，删除fragment里的listview内容
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+                if(newQuery.equals("")){
+                    mainSearchFragment.clearList();
+                }
+            }
+        });
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -50,15 +81,7 @@ public class MainSearchActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        MainSearchFragment mainSearchFragment =
-                (MainSearchFragment) getSupportFragmentManager().findFragmentById(R.id.content_main_search);
-        if (mainSearchFragment == null){
-            mainSearchFragment = MainSearchFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    mainSearchFragment, R.id.content_main_search);
-        }
 
-        new MainSearchPresenter(mainSearchFragment);
     }
 
     @Override
