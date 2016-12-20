@@ -1,5 +1,6 @@
 package com.ar.lee.baikeapplication.entrydetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.view.View;
 
 import com.ar.lee.baikeapplication.R;
 import com.ar.lee.baikeapplication.addentry.AddEntryFragment;
+import com.ar.lee.baikeapplication.entrycomment.EntryCommentActivity;
 import com.ar.lee.baikeapplication.util.ActivityUtils;
 
 public class EntryDetailActivity extends AppCompatActivity {
@@ -70,7 +72,8 @@ public class EntryDetailActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_entry_detail_comment:
-                //TODO: go to comment activity
+                Intent intentToComment = new Intent(EntryDetailActivity.this, EntryCommentActivity.class);
+                startActivity(intentToComment);
                 break;
         }
 

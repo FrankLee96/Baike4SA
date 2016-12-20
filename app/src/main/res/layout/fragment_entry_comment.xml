@@ -11,4 +11,15 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/entry_comment_internet_wrong_text"
+        android:visibility="gone"
+        android:paddingBottom="20dp"
+        android:text="网络不通畅呢,请稍后再试"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/colorTextPrimary"
+        android:layout_gravity="center"/>
+
 </FrameLayout>

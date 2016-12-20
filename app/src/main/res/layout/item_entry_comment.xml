@@ -9,7 +9,7 @@
     android:orientation="vertical">
     <TextView
         android:id="@+id/entry_comment_user_name"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         android:textStyle="bold"
         android:text="用户名"
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
     <TextView
         android:layout_below="@id/entry_comment_user_name"
         android:id="@+id/entry_comment_user_comment"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         android:layout_marginTop="10dp"
         android:text="用户评论：abcdefghijklmn"
         android:layout_width="wrap_content"
@@ -27,6 +27,7 @@
         android:id="@+id/entry_comment_date"
         android:layout_marginTop="10dp"
         android:text="11-30"
+        android:textColor="@color/colorTextSecondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
