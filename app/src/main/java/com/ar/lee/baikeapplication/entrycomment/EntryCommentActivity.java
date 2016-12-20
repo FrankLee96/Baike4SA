@@ -24,15 +24,6 @@ public class EntryCommentActivity extends AppCompatActivity {
         actionBar.setTitle("词条评论");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         EntryCommentFragment entryCommentFragment = (EntryCommentFragment)
                 getSupportFragmentManager().findFragmentById(R.id.content_entry_comment);
         if (entryCommentFragment == null){

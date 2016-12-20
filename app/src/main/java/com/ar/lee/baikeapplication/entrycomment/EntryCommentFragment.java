@@ -1,14 +1,20 @@
 package com.ar.lee.baikeapplication.entrycomment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ar.lee.baikeapplication.R;
 import com.ar.lee.baikeapplication.data.EntryComment;
@@ -30,7 +36,10 @@ public class EntryCommentFragment extends Fragment implements EntryCommentContra
 
     private EntryCommentContract.Presenter mPresenter;
 
+    //widgets
     private RecyclerView commentRecyclerView;
+    private FloatingActionButton addFloatingButton;
+    private TextView wrongTextView;
 
     public EntryCommentFragment() {
         // Required empty public constructor
@@ -73,17 +82,51 @@ public class EntryCommentFragment extends Fragment implements EntryCommentContra
 
     private View initViews(View fragment){
         commentRecyclerView = (RecyclerView) fragment.findViewById(R.id.entry_comment_list);
-        List<EntryComment> list = new ArrayList<>();
-        list.add(new EntryComment());
-        list.add(new EntryComment());
-        list.add(new EntryComment());
+        addFloatingButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        addFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCommentDialog();
+            }
+        });
+        wrongTextView = (TextView) fragment.findViewById(R.id.entry_comment_internet_wrong_text);
+
+        return fragment;
+    }
+
+    @Override
+    public void showComments(List<EntryComment> list) {
         CommentListAdapter adapter = new CommentListAdapter(getContext(), list);
         commentRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         commentRecyclerView.setAdapter(adapter);
-        commentRecyclerView.addItemDecoration(new CommentListDecoration(getContext(), CommentListDecoration.VERTICAL_LIST));
+        commentRecyclerView.addItemDecoration(new CommentListDecoration(getContext(),
+                CommentListDecoration.VERTICAL_LIST));
+    }
 
-        return fragment;
+    @Override
+    public void showCommentsLoadFailure() {
+        wrongTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showCommentDialog(){
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
+        builder.setTitle("请输入评论");
+        builder.setView(R.layout.dialog_write_comment);
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", null);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getContext().getResources().getColor(R.color.colorTextPrimary));
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.addComment(new EntryComment("测试用户名",
+                        ((EditText)dialog.findViewById(R.id.comment_dialog_content)).getText().toString()));
+                dialog.dismiss();
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

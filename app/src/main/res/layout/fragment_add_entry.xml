@@ -26,6 +26,8 @@
                 android:layout_height="wrap_content"
                 android:hint="词条标题"
                 android:singleLine="true"
+                android:textColorHint="@color/colorTextSecondary"
+                android:textColor="@color/colorTextPrimary"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
         </FrameLayout>
 
@@ -34,6 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:gravity="top"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="@color/colorTextSecondary"
             android:hint="词条正文" />
 
 
