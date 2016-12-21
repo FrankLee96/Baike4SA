@@ -1,6 +1,5 @@
 package com.ar.lee.baikeapplication.mainsearch;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import java.util.List;
  * Use the {@link MainSearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainSearchFragment extends Fragment implements MainSearchContract.View{
+public class MainSearchFragment extends Fragment implements MainSearchContract.View,Words_List_Adapter.ItemClickListener{
 
     private MainSearchContract.Presenter mPresenter;
     private ListView words_listView;
@@ -116,7 +115,7 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
     @Override
     public void refresh_listView() {
         adapter = new Words_List_Adapter(context,
-                R.layout.word_lists_layout,words_list);
+                R.layout.word_lists_layout,words_list,this);
         words_listView.setAdapter(adapter);
         Utility();
     }
@@ -141,5 +140,15 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
     @Override
     public void clearList() {
         words_listView.setAdapter(null);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        onItemClicked(position);
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        Log.d("position",position+"");
     }
 }

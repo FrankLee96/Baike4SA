@@ -1,6 +1,8 @@
 package com.ar.lee.baikeapplication.loginAndRegister;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +21,12 @@ public class LoginRegisterFragment extends Fragment implements LoginAndRegisterC
     private TextView password_tv;
     private Button login;
     private Button register;
-
+    private LoginAndRegisterContract.Presenter presenter;
+    private Context context;
 
     @Override
     public void setPresenter(LoginAndRegisterContract.Presenter presenter) {
-
+        this.presenter = presenter;
     }
     public static LoginRegisterFragment newInstance(){
         LoginRegisterFragment fragment = new LoginRegisterFragment();
@@ -44,19 +47,24 @@ public class LoginRegisterFragment extends Fragment implements LoginAndRegisterC
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO login operation
+                presenter.login();
             }
         });
         register = (Button)fragment.findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO register operation
+                presenter.register();
             }
         });
         return fragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public String getUsername() {
@@ -66,5 +74,29 @@ public class LoginRegisterFragment extends Fragment implements LoginAndRegisterC
     @Override
     public String getPassword() {
         return password_tv.getText().toString().trim();
+    }
+
+    @Override
+    public void loginSuccess() {
+        //TODO
+        Snackbar.make(login,"login success",Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void loginFailure() {
+        //TODO
+
+    }
+
+    @Override
+    public void registerSuccess() {
+        //TODO
+        Snackbar.make(login,"register success",Snackbar.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void registerFailure() {
+        //TODO
     }
 }

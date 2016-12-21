@@ -15,6 +15,7 @@ public interface MainSearchContract {
         void refresh_listView();
         void refresh_words_list(List<WordsBean> list);
         void clearList();
+        void onItemClicked(int position);
     }
 
     interface Presenter extends BasePresenter{

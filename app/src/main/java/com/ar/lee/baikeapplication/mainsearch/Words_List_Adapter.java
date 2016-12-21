@@ -2,7 +2,7 @@ package com.ar.lee.baikeapplication.mainsearch;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +18,23 @@ import java.util.List;
  */
 
 public class Words_List_Adapter extends ArrayAdapter<WordsBean> {
+    public interface ItemClickListener {
+        void onItemClick(int position);
+    }
+
     private int resourceId;
-    public Words_List_Adapter(Context context, int resourceId, List<WordsBean> objects){
+    private static ItemClickListener mItemClickListener;
+
+    public Words_List_Adapter(Context context, int resourceId, List<WordsBean> objects,ItemClickListener itemClickListener){
         super(context,resourceId,objects);
         this.resourceId = resourceId;
+        mItemClickListener = itemClickListener;
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         WordsBean word = getItem(position);
         String word_txt = word.getWord_txt();
         String word_abstract = word.getWord_abstract();
@@ -35,6 +42,13 @@ public class Words_List_Adapter extends ArrayAdapter<WordsBean> {
         word_txtView.setText(word_txt);
         TextView word_abstractView = (TextView)view.findViewById(R.id.abstract_word);
         word_abstractView.setText(word_abstract);
+        CardView cardView = (CardView)view.findViewById(R.id.cardView);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener.onItemClick(position);
+            }
+        });
         return view;
     }
 }

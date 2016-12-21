@@ -5,6 +5,12 @@ package com.ar.lee.baikeapplication.loginAndRegister;
  */
 
 public class LoginAndRegisterPresenter implements LoginAndRegisterContract.Presenter{
+    private LoginAndRegisterContract.View fragment;
+    public LoginAndRegisterPresenter(LoginRegisterFragment fragment){
+        this.fragment = fragment;
+        fragment.setPresenter(this);
+    }
+
     @Override
     public void start() {
 
@@ -12,11 +18,15 @@ public class LoginAndRegisterPresenter implements LoginAndRegisterContract.Prese
 
     @Override
     public void login() {
-
+        String username = fragment.getUsername();
+        String password = fragment.getPassword();
+        fragment.loginSuccess();
     }
 
     @Override
     public void register() {
-
+        String username = fragment.getUsername();
+        String password = fragment.getPassword();
+        fragment.registerSuccess();
     }
 }

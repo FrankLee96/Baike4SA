@@ -12,7 +12,10 @@ public interface LoginAndRegisterContract {
     interface View extends BaseView<Presenter> {
         String getUsername();
         String getPassword();
-
+        void loginSuccess();
+        void loginFailure();
+        void registerSuccess();
+        void registerFailure();
     }
 
     interface Presenter extends BasePresenter {

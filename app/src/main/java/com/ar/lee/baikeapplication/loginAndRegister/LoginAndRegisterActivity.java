@@ -19,6 +19,7 @@ public class LoginAndRegisterActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     loginRegisterFragment, R.id.content_login_register);
         }
+        LoginAndRegisterPresenter presenter = new LoginAndRegisterPresenter(loginRegisterFragment);
 
     }
     @Override
