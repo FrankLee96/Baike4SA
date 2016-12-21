@@ -1,46 +1,87 @@
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
-
-
-        <FrameLayout
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp">
-            <ImageView
-                android:id="@+id/add_entry_img_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="词条标题" />
             <EditText
+                android:layout_marginTop="8dp"
                 android:id="@+id/add_entry_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="词条标题"
                 android:singleLine="true"
-                android:textColorHint="@color/colorTextSecondary"
+                android:hint="请不要在标题中使用标点"
+                android:background="@null"
+                android:textColorHint="@color/colorDivider"
+                android:textColor="@color/colorTextPrimary" />
+            <View
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="词条图片" />
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+                <ImageView
+                    android:id="@+id/add_entry_img_view"
+                    android:src="@drawable/img_entry_img_test"
+                    android:scaleType="fitXY"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="词条正文" />
+
+            <EditText
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:textSize="15sp"
+                android:id="@+id/add_entry_description"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:gravity="top"
+                android:hint="分段更有利于理解"
                 android:textColor="@color/colorTextPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-        </FrameLayout>
+                android:textColorHint="@color/colorDivider" />
 
-        <EditText
-            android:id="@+id/add_entry_description"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:gravity="top"
-            android:textColor="@color/colorTextPrimary"
-            android:textColorHint="@color/colorTextSecondary"
-            android:hint="词条正文" />
+            <View
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
 
-
-
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
