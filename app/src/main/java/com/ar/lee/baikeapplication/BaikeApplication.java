@@ -2,26 +2,25 @@ package com.ar.lee.baikeapplication;
 
 import android.app.Application;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.ar.lee.baikeapplication.network.HttpController;
+import com.ar.lee.baikeapplication.network.RequestQueue;
 
 /**
  * Created by Lee on 2016/12/21.
  */
 
 public class BaikeApplication extends Application{
-    public static RequestQueue volleyQueue;
+    public static RequestQueue mQueue;
     @Override
     public void onCreate() {
         super.onCreate();
 
-        /* Volley配置 */
-        // 建立Volley的Http请求队列
-        volleyQueue = Volley.newRequestQueue(getApplicationContext());
+        mQueue = HttpController.createNewRequestQueue();
+        mQueue.start();
     }
 
     // 开放Volley的HTTP请求队列接口
     public static RequestQueue getRequestQueue() {
-        return volleyQueue;
+        return mQueue;
     }
 }
