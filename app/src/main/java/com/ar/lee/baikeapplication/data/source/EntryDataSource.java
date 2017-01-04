@@ -41,11 +41,27 @@ public interface EntryDataSource {
         void addFailure(String code);
     }
 
+    interface UploadImageCallback{
+
+        void uploadSuccess(String filePath);
+
+        void uploadFailure(String code);
+    }
+
+    interface AddEntryCallback{
+
+        void addSuccess();
+
+        void addFailure(String code);
+    }
+
     void getEntry(@NonNull String entryId, @NonNull GetEntryCallback callback);
 
-    void addEntry(@NonNull Entry newEntry);
+    void uploadImage(@NonNull String imgPath, @NonNull UploadImageCallback callback);
+
+    void addEntry(@NonNull Entry newEntry, @NonNull AddEntryCallback callback);
 
     void loadEntryComments(@NonNull String entryId, @NonNull LoadCommentsCallback callback);
 
-    void addEntryComment(@NonNull EntryComment newComment, @NonNull AddCommentCallback callback);
+    void addEntryComment(@NonNull String entryId, @NonNull EntryComment newComment, @NonNull AddCommentCallback callback);
 }

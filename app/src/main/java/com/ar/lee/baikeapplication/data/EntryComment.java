@@ -14,10 +14,19 @@ public class EntryComment {
 
     private long createdTime;
 
+    private String timeFormat;
+
     public EntryComment(String userName, String content){
         this.userName = userName;
         this.content = content;
         this.createdTime = System.currentTimeMillis();
+        timeFormat = DateShownUtils.commentDateFormat(createdTime);
+    }
+
+    public EntryComment(String userName, String content, String timeFormat){
+        this.userName = userName;
+        this.content = content;
+        this.timeFormat = timeFormat;
     }
 
     public String getUserName() {
@@ -29,7 +38,7 @@ public class EntryComment {
     }
 
     public String getCreatedDateString() {
-        return DateShownUtils.commentDateFormat(createdTime);
+        return timeFormat;
     }
 
     public void setUserName(String userName) {

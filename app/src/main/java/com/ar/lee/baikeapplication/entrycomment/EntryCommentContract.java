@@ -36,8 +36,9 @@ public interface EntryCommentContract {
 
         /**
          * 添加评论
+         * @param entryID 词条项ID
          * @param comment 评论项
          */
-        void addComment(EntryComment comment);
+        void addComment(String entryID, EntryComment comment);
     }
 }

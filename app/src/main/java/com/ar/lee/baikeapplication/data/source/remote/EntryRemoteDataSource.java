@@ -1,10 +1,24 @@
 package com.ar.lee.baikeapplication.data.source.remote;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.ar.lee.baikeapplication.BaikeApplication;
 import com.ar.lee.baikeapplication.data.Entry;
 import com.ar.lee.baikeapplication.data.EntryComment;
 import com.ar.lee.baikeapplication.data.source.EntryDataSource;
+import com.ar.lee.baikeapplication.network.entity.MultipartEntity;
+import com.ar.lee.baikeapplication.network.listener.RequestCompleteListener;
+import com.ar.lee.baikeapplication.network.request.MultipartRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Lee on 2016/12/20.
@@ -23,22 +37,170 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void getEntry(@NonNull String entryId, @NonNull GetEntryCallback callback) {
+    public void getEntry(@NonNull final String entryId, @NonNull final GetEntryCallback callback) {
+        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/User/register/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String err = object.getString("err");
+                            if (err.equals("-1")){
+                                callback.onDataNotAvailable();
+                            } else {
+                                callback.onEntryLoaded(new Entry(entryId,
+                                        object.getString("title"), object.getString("text"), object.getString("imagePath")));
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
 
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("itemID", entryId);
+        BaikeApplication.getRequestQueue().addRequest(request);
     }
 
     @Override
-    public void addEntry(@NonNull Entry newEntry) {
+    public void addEntry(@NonNull Entry newEntry, @NonNull final AddEntryCallback callback) {
+        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Item/add/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String err = object.getString("err");
+                            if (err.equals("-1")){
+                                callback.addFailure(object.getString("msg"));
+                            } else {
+                                callback.addSuccess();
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
 
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("title", newEntry.getTitle());
+        multipartEntity.addStringPart("text", newEntry.getDescription());
+        multipartEntity.addStringPart("imagePath", newEntry.getImagePath());
+        BaikeApplication.getRequestQueue().addRequest(request);
     }
 
     @Override
-    public void loadEntryComments(@NonNull String entryId, @NonNull LoadCommentsCallback callback) {
+    public void uploadImage(@NonNull String imgPath, @NonNull final UploadImageCallback callback) {
+        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Image/add/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String err = object.getString("err");
+                            if (err.equals("-1")){
+                                callback.uploadFailure(object.getString("msg"));
+                            } else {
+                                callback.uploadSuccess(object.getString("path"));
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
 
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addFilePart("file", new File(imgPath));
+        BaikeApplication.getRequestQueue().addRequest(request);
     }
 
     @Override
-    public void addEntryComment(@NonNull EntryComment newComment, @NonNull AddCommentCallback callback) {
+    public void loadEntryComments(@NonNull String entryId, @NonNull final LoadCommentsCallback callback) {
+        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Comment/get/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String err = object.getString("err");
+                            if (err.equals("-1")){
+                                callback.onDataNotAvailable();
+                            } else {
+                                JSONArray array = new JSONArray(object.getJSONArray("itemList"));
+                                List<EntryComment> list = new ArrayList<>();
+                                for (int i = 0; i < array.length(); i++){
+                                    JSONObject item = array.getJSONObject(i);
+                                    list.add(new EntryComment(item.getString("account"),
+                                            item.getString("context"), item.getString("time")));
+                                }
+                                callback.onCommentsLoaded(list);
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
 
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("itemID", entryId);
+        BaikeApplication.getRequestQueue().addRequest(request);
+    }
+
+    @Override
+    public void addEntryComment(@NonNull String entryId, @NonNull EntryComment newComment, @NonNull final AddCommentCallback callback) {
+        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Comment/add/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            String err = object.getString("err");
+                            if (err.equals("-1")){
+                                callback.addFailure("评论发布失败:" + object.getString("msg"));
+                            } else {
+                                callback.addSuccess();
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
+
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("userID", "测试用户ID");
+        multipartEntity.addStringPart("itemID", entryId);
+        multipartEntity.addStringPart("text", newComment.getContent());
+        multipartEntity.addStringPart("time", newComment.getCreatedDateString());
+        BaikeApplication.getRequestQueue().addRequest(request);
     }
 }

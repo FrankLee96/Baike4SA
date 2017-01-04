@@ -36,6 +36,8 @@ public class EntryCommentFragment extends Fragment implements EntryCommentContra
 
     private EntryCommentContract.Presenter mPresenter;
 
+    private String entryID = "测试ID";
+
     //widgets
     private RecyclerView commentRecyclerView;
     private FloatingActionButton addFloatingButton;
@@ -122,7 +124,7 @@ public class EntryCommentFragment extends Fragment implements EntryCommentContra
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.addComment(new EntryComment("测试用户名",
+                mPresenter.addComment(entryID, new EntryComment("测试用户名",
                         ((EditText)dialog.findViewById(R.id.comment_dialog_content)).getText().toString()));
                 dialog.dismiss();
             }

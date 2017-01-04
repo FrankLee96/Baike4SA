@@ -139,8 +139,7 @@ public class AddEntryFragment extends Fragment implements AddEntryContract.View{
             Snackbar.make(addImageFloatingButton, "输入不能为空", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            mPresenter.uploadEntry(
-                    new Entry(Entry.NO_ID_WHEN_CREATE, entryTitleEditText.getText().toString(),
+            mPresenter.uploadEntry(new Entry(Entry.NO_ID_WHEN_CREATE, entryTitleEditText.getText().toString(),
                             entryDescriptionEditText.getText().toString(), mImgPath));
         }
     }
@@ -149,6 +148,11 @@ public class AddEntryFragment extends Fragment implements AddEntryContract.View{
     public void returnToMeanSearch() {
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
+    }
+
+    @Override
+    public void showErrorInf(String inf) {
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

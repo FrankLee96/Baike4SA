@@ -33,8 +33,13 @@ public class EntryRepository implements EntryDataSource{
     }
 
     @Override
-    public void addEntry(@NonNull Entry newEntry) {
+    public void uploadImage(@NonNull String imgPath, @NonNull UploadImageCallback callback) {
+        mRemoteDataSource.uploadImage(imgPath, callback);
+    }
 
+    @Override
+    public void addEntry(@NonNull Entry newEntry, @NonNull AddEntryCallback callback) {
+        mRemoteDataSource.addEntry(newEntry, callback);
     }
 
     @Override
@@ -43,7 +48,7 @@ public class EntryRepository implements EntryDataSource{
     }
 
     @Override
-    public void addEntryComment(@NonNull EntryComment newComment, @NonNull AddCommentCallback callback) {
+    public void addEntryComment(@NonNull String entryId, @NonNull EntryComment newComment, @NonNull AddCommentCallback callback) {
 
     }
 }

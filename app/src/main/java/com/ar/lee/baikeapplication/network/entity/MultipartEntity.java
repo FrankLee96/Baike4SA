@@ -146,11 +146,10 @@ public class MultipartEntity implements HttpEntity{
             final String type = CONTENT_TYPE + TYPE_OCTET_STREAM + NEW_LINE_STR;
             Log.d("test", new String(getContentDispositionBytes(key, file.getName())));
             mOutputStream.write(getContentDispositionBytes(key, file.getName()));
-            Log.d("test", ("Content-Type: " + URLConnection.guessContentTypeFromName(file.getName())+NEW_LINE_STR));
-            mOutputStream.write(("Content-Type: " + URLConnection.guessContentTypeFromName(file.getName())+NEW_LINE_STR).getBytes());
+            Log.d("test", type);
+            mOutputStream.write(type.getBytes());
             Log.d("test", new String(BINARY_ENCODING));
             mOutputStream.write(BINARY_ENCODING);
-            mOutputStream.write(NEW_LINE_STR.getBytes());
 
             final byte[] tmp = new byte[4096];
             int len = 0;

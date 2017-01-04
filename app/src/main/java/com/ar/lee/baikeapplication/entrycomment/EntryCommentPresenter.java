@@ -59,8 +59,8 @@ public class EntryCommentPresenter implements EntryCommentContract.Presenter{
     }
 
     @Override
-    public void addComment(EntryComment comment) {
-        EntryRepository.getInstance().addEntryComment(comment,
+    public void addComment(String entryID, EntryComment comment) {
+        EntryRepository.getInstance().addEntryComment(entryID, comment,
                 new EntryDataSource.AddCommentCallback() {
                     @Override
                     public void addSuccess() {

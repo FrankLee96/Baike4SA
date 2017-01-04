@@ -21,6 +21,12 @@ public interface AddEntryContract{
          * 上传完成之后关闭界面返回主界面
          */
         void returnToMeanSearch();
+
+        /**
+         * 显示错误信息
+         * @param inf 错误信息
+         */
+        void showErrorInf(String inf);
     }
 
     interface Presenter extends BasePresenter{
