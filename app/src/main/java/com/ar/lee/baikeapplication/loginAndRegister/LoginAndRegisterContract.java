@@ -13,9 +13,11 @@ public interface LoginAndRegisterContract {
         String getUsername();
         String getPassword();
         void loginSuccess();
-        void loginFailure();
+        void showDialog(String msg);
+        void hideDialog();
+        void loginFailure(String err);
         void registerSuccess();
-        void registerFailure();
+        void registerFailure(String err);
     }
 
     interface Presenter extends BasePresenter {

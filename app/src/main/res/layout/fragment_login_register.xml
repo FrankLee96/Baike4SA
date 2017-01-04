@@ -24,80 +24,55 @@
         <!--android:layout_height="1px"-->
         <!--android:background="#333333"-->
         <!--android:layout_marginTop="20dp"/>-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="用户名："
-                android:layout_gravity="bottom"/>
-            <EditText
-                android:id="@+id/username"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:layout_gravity="bottom"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="密    码："
-                android:maxLines="1"
-                android:layout_gravity="bottom"/>
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:layout_gravity="bottom"/>
-        </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_gravity="bottom"
+                    android:hint="请输入用户名"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:layout_gravity="bottom"
+                    android:hint="请输入密码"/>
+            </android.support.design.widget.TextInputLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
+
             <Button
                 android:elevation="10dp"
                 android:id="@+id/login"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:text="登录"
-                android:layout_marginRight="10dp"
                 android:textColor="#ffffff"
                 android:theme="@style/CustomButton"
                 />
             <Button
                 android:elevation="10dp"
                 android:id="@+id/register"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="注册"
                 android:textColor="#ffffff"
                 android:theme="@style/CustomButton"
-                />
-        </LinearLayout>
 
+                />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

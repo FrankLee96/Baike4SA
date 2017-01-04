@@ -10,8 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ar.lee.baikeapplication.R;
+import com.ar.lee.baikeapplication.data.WordsBean;
 
 import java.util.List;
+
+import static com.ar.lee.baikeapplication.R.id.word_txt;
 
 /**
  * Created by jeffdeen on 2016/12/18.
@@ -36,10 +39,10 @@ public class Words_List_Adapter extends ArrayAdapter<WordsBean> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         WordsBean word = getItem(position);
-        String word_txt = word.getWord_txt();
-        String word_abstract = word.getWord_abstract();
-        TextView word_txtView=(TextView)view.findViewById(R.id.word_txt);
-        word_txtView.setText(word_txt);
+        String word_title = word.getWord_title();
+        String word_abstract = word.getWord_description();
+        TextView word_txtView=(TextView)view.findViewById(word_txt);
+        word_txtView.setText(word_title);
         TextView word_abstractView = (TextView)view.findViewById(R.id.abstract_word);
         word_abstractView.setText(word_abstract);
         CardView cardView = (CardView)view.findViewById(R.id.cardView);

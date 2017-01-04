@@ -2,6 +2,7 @@ package com.ar.lee.baikeapplication.mainsearch;
 
 import com.ar.lee.baikeapplication.BasePresenter;
 import com.ar.lee.baikeapplication.BaseView;
+import com.ar.lee.baikeapplication.data.WordsBean;
 
 import java.util.List;
 
@@ -16,12 +17,13 @@ public interface MainSearchContract {
         void refresh_words_list(List<WordsBean> list);
         void clearList();
         void onItemClicked(int position);
+        void getRecommendationFailure(String code);
     }
 
     interface Presenter extends BasePresenter{
         void Query(String query_txt);
         void refresh_listView();
         void refresh_words_list();
-
+        void getRecommendation();
     }
 }

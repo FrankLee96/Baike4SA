@@ -1,8 +1,10 @@
 package com.ar.lee.baikeapplication.mainsearch;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ar.lee.baikeapplication.R;
+import com.ar.lee.baikeapplication.data.WordsBean;
+import com.ar.lee.baikeapplication.entrydetail.EntryDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +68,7 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
         View fragment;
         fragment =  inflater.inflate(R.layout.fragment_main_search, container, false);
         words_listView =(ListView) fragment.findViewById(R.id.words_listView);
+        mPresenter.getRecommendation();
         return fragment;
     }
 
@@ -150,5 +155,14 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
     @Override
     public void onItemClicked(int position) {
         Log.d("position",position+"");
+        Intent intent = new Intent();
+        intent.putExtra("itemID", words_list.get(position).getWord_id());
+        intent.setClass(context, EntryDetailActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void getRecommendationFailure(String code) {
+        Snackbar.make(words_listView,code,Snackbar.LENGTH_LONG).show();
     }
 }

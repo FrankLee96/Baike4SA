@@ -1,7 +1,5 @@
 package com.ar.lee.baikeapplication.addentry;
 
-import android.util.Log;
-
 import com.ar.lee.baikeapplication.data.Entry;
 import com.ar.lee.baikeapplication.data.source.EntryDataSource;
 import com.ar.lee.baikeapplication.data.source.EntryRepository;
@@ -48,6 +46,5 @@ public class AddEntryPresenter implements AddEntryContract.Presenter{
 
     @Override
     public void start() {
-
     }
 }

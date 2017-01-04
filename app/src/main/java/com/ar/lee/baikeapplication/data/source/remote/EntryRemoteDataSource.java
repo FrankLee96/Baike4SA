@@ -1,15 +1,18 @@
 package com.ar.lee.baikeapplication.data.source.remote;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ar.lee.baikeapplication.BaikeApplication;
 import com.ar.lee.baikeapplication.data.Entry;
 import com.ar.lee.baikeapplication.data.EntryComment;
 import com.ar.lee.baikeapplication.data.source.EntryDataSource;
+import com.ar.lee.baikeapplication.network.Request;
 import com.ar.lee.baikeapplication.network.entity.MultipartEntity;
 import com.ar.lee.baikeapplication.network.listener.RequestCompleteListener;
 import com.ar.lee.baikeapplication.network.request.MultipartRequest;
+import com.ar.lee.baikeapplication.network.request.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class EntryRemoteDataSource implements EntryDataSource{
 
     private static EntryRemoteDataSource INSTANCE;
+    private final String URL = "http://192.168.199.143:54865";
 
     public static EntryRemoteDataSource getInstance(){
         if (INSTANCE == null){
@@ -38,7 +42,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void getEntry(@NonNull final String entryId, @NonNull final GetEntryCallback callback) {
-        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/User/register/",
+        final MultipartRequest request = new MultipartRequest(URL+"/User/register/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -70,7 +74,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void addEntry(@NonNull Entry newEntry, @NonNull final AddEntryCallback callback) {
-        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Item/add/",
+        final MultipartRequest request = new MultipartRequest(URL+"/Item/add/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -103,7 +107,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void uploadImage(@NonNull String imgPath, @NonNull final UploadImageCallback callback) {
-        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Image/add/",
+        final MultipartRequest request = new MultipartRequest(URL+"/Image/add/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -134,7 +138,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void loadEntryComments(@NonNull String entryId, @NonNull final LoadCommentsCallback callback) {
-        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Comment/get/",
+        final MultipartRequest request = new MultipartRequest(URL+"/Comment/get/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -172,7 +176,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void addEntryComment(@NonNull String entryId, @NonNull EntryComment newComment, @NonNull final AddCommentCallback callback) {
-        final MultipartRequest request = new MultipartRequest("http://192.168.199.143:54865/Comment/add/",
+        final MultipartRequest request = new MultipartRequest(URL+"/Comment/add/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -201,6 +205,94 @@ public class EntryRemoteDataSource implements EntryDataSource{
         multipartEntity.addStringPart("itemID", entryId);
         multipartEntity.addStringPart("text", newComment.getContent());
         multipartEntity.addStringPart("time", newComment.getCreatedDateString());
+        BaikeApplication.getRequestQueue().addRequest(request);
+    }
+
+    @Override
+    public void register(@Nullable String username, @Nullable String passwd, @Nullable final RegisterCallback callback) {
+        final MultipartRequest request = new MultipartRequest(URL+"/User/register/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg) {
+                        Log.d("test", response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            if(object.get("err").equals("0")){
+                               callback.registerSuccess();
+                            }else{
+                               callback.registerFailure("注册失败，失败代码 "+object.get("err").toString());
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
+
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("account", username);
+        multipartEntity.addStringPart("password", passwd);
+        BaikeApplication.getRequestQueue().addRequest(request);
+    }
+
+    @Override
+    public void login(@Nullable String username, @Nullable String passwd, @Nullable final LoginCallback callback) {
+        final MultipartRequest request = new MultipartRequest(URL+"/User/login/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg){
+                        Log.d("test", response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            if(object.get("err").equals("0")){
+                                callback.loginSuccess();
+                            }else{
+                                callback.loginFailure("登录失败，失败代码 "+object.get("err").toString());
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
+
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("account", username);
+        multipartEntity.addStringPart("password", passwd);
+        BaikeApplication.getRequestQueue().addRequest(request);
+    }
+
+    @Override
+    public void getRecommendation(@Nullable final GetRecommendationCallback callback) {
+        StringRequest request = new StringRequest(Request.HttpMethod.GET, URL+"/Item/recommend/", new RequestCompleteListener<String>() {
+            @Override
+            public void onComplete(int stateCode, String response, String errMsg) {
+                try{
+                    Log.d("response",response);
+                    JSONObject object = new JSONObject(response);
+                    if(object.getString("err").equals("0")){
+                       callback.getSuccess(response);
+                    }else{
+                        callback.getFailure("获取首页内容失败，失败代码 "+object.get("err").toString());
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    throw new RuntimeException("JSONException");
+                }
+
+            }
+        });
         BaikeApplication.getRequestQueue().addRequest(request);
     }
 }

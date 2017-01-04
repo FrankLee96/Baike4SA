@@ -12,4 +12,10 @@
         <!-- 按钮正常背景颜色 -->
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
+    <style name="CustomButton2" parent="Theme.AppCompat.Light">
+        <!-- 点击高亮时背景颜色 -->
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <!-- 按钮正常背景颜色 -->
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+    </style>
 </resources>
