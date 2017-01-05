@@ -1,5 +1,7 @@
 package com.ar.lee.baikeapplication.loginAndRegister;
 
+import android.content.Context;
+
 import com.ar.lee.baikeapplication.BasePresenter;
 import com.ar.lee.baikeapplication.BaseView;
 
@@ -18,6 +20,7 @@ public interface LoginAndRegisterContract {
         void loginFailure(String err);
         void registerSuccess();
         void registerFailure(String err);
+        Context getContext();
     }
 
     interface Presenter extends BasePresenter {

@@ -1,6 +1,9 @@
 package com.ar.lee.baikeapplication.loginAndRegister;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.ar.lee.baikeapplication.data.source.EntryDataSource;
 import com.ar.lee.baikeapplication.data.source.EntryRepository;
 
@@ -28,7 +31,12 @@ public class LoginAndRegisterPresenter implements LoginAndRegisterContract.Prese
         String password = fragment.getPassword();
         EntryRepository.getInstance().login(username,password,new EntryDataSource.LoginCallback(){
             @Override
-            public void loginSuccess() {
+            public void loginSuccess(String username,String userID) {
+                SharedPreferences preferences=fragment.getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=preferences.edit();
+                editor.putString("username", username);
+                editor.putString("userID", userID);
+                editor.apply();
                 fragment.hideDialog();
                 fragment.loginSuccess();
             }
@@ -50,7 +58,12 @@ public class LoginAndRegisterPresenter implements LoginAndRegisterContract.Prese
 
         EntryRepository.getInstance().register(username,password,new EntryDataSource.RegisterCallback(){
             @Override
-            public void registerSuccess() {
+            public void registerSuccess(String username,String userID) {
+                SharedPreferences preferences=fragment.getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=preferences.edit();
+                editor.putString("username", username);
+                editor.putString("userID", userID);
+                editor.apply();
                 fragment.hideDialog();
                 fragment.registerSuccess();
             }

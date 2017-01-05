@@ -2,6 +2,7 @@ package com.ar.lee.baikeapplication.loginAndRegister;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ar.lee.baikeapplication.R;
+import com.ar.lee.baikeapplication.mainsearch.MainSearchActivity;
 
 /**
  * Created by jeffdeen on 2016/12/19.
@@ -103,6 +105,8 @@ public class LoginRegisterFragment extends Fragment implements LoginAndRegisterC
     public void loginSuccess() {
         //TODO
         Snackbar.make(login,"登录成功",Snackbar.LENGTH_LONG).show();
+        Intent intent = new Intent(context, MainSearchActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -116,12 +120,17 @@ public class LoginRegisterFragment extends Fragment implements LoginAndRegisterC
     public void registerSuccess() {
         //TODO
         Snackbar.make(login,"注册成功",Snackbar.LENGTH_LONG).show();
-
+        Intent intent = new Intent(context, MainSearchActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void registerFailure(String err) {
         //TODO
         Snackbar.make(login,err,Snackbar.LENGTH_LONG).show();
+    }
+
+    public Context getContext(){
+        return context;
     }
 }

@@ -58,7 +58,7 @@ public interface EntryDataSource {
 
     interface LoginCallback{
 
-        void loginSuccess();
+        void loginSuccess(String username,String userID);
 
         void loginFailure(String code);
 
@@ -66,7 +66,7 @@ public interface EntryDataSource {
 
     interface RegisterCallback{
 
-        void registerSuccess();
+        void registerSuccess(String username,String userID);
 
         void registerFailure(String code);
     }

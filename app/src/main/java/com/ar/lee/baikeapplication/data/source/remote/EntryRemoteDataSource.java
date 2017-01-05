@@ -30,7 +30,7 @@ import java.util.Map;
 public class EntryRemoteDataSource implements EntryDataSource{
 
     private static EntryRemoteDataSource INSTANCE;
-    private final String URL = "http://192.168.199.143:54865";
+    private final String URL = "http://118.89.57.14:54866";
 
     public static EntryRemoteDataSource getInstance(){
         if (INSTANCE == null){
@@ -209,7 +209,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void register(@Nullable String username, @Nullable String passwd, @Nullable final RegisterCallback callback) {
+    public void register(@Nullable final String username, @Nullable String passwd, @Nullable final RegisterCallback callback) {
         final MultipartRequest request = new MultipartRequest(URL+"/User/register/",
                 new RequestCompleteListener<String>() {
                     @Override
@@ -217,10 +217,11 @@ public class EntryRemoteDataSource implements EntryDataSource{
                         Log.d("test", response);
                         try{
                             JSONObject object = new JSONObject(response);
-                            if(object.get("err").equals("0")){
-                               callback.registerSuccess();
+                            String err = object.getString("err");
+                            if(err.equals("0")){
+                               callback.registerSuccess(username,object.getString("userID"));
                             }else{
-                               callback.registerFailure("注册失败，失败代码 "+object.get("err").toString());
+                               callback.registerFailure("注册失败，失败代码 "+object.getString("err"));
                             }
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -241,7 +242,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void login(@Nullable String username, @Nullable String passwd, @Nullable final LoginCallback callback) {
+    public void login(@Nullable final String username, @Nullable String passwd, @Nullable final LoginCallback callback) {
         final MultipartRequest request = new MultipartRequest(URL+"/User/login/",
                 new RequestCompleteListener<String>() {
                     @Override
@@ -249,10 +250,10 @@ public class EntryRemoteDataSource implements EntryDataSource{
                         Log.d("test", response);
                         try{
                             JSONObject object = new JSONObject(response);
-                            if(object.get("err").equals("0")){
-                                callback.loginSuccess();
+                            if(object.get("err").toString().equals("0")){
+                                callback.loginSuccess(username,object.getString("userID"));
                             }else{
-                                callback.loginFailure("登录失败，失败代码 "+object.get("err").toString());
+                                callback.loginFailure("登录失败，失败代码 "+object.getString("err"));
                             }
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -283,7 +284,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
                     if(object.getString("err").equals("0")){
                        callback.getSuccess(response);
                     }else{
-                        callback.getFailure("获取首页内容失败，失败代码 "+object.get("err").toString());
+                        callback.getFailure("获取首页内容失败，失败代码 "+object.getString("err"));
                     }
 
                 }catch (JSONException e){
