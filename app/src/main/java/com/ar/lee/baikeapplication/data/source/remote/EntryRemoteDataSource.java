@@ -325,6 +325,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
         MultipartEntity multipartEntity = request.getMultiPartEntity();
         multipartEntity.addStringPart("title", query_txt);
+        request.setShouldCache(false);
         BaikeApplication.getRequestQueue().addRequest(request);
     }
 }

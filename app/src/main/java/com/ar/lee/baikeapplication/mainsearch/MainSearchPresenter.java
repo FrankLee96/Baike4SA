@@ -53,6 +53,7 @@ public class MainSearchPresenter implements MainSearchContract.Presenter{
 //        for (int i = 0;i<1;++i){
 //            words_list.add(word);
 //        }
+        String txt = query_txt;
         EntryRepository.getInstance().getQuery(query_txt,new EntryDataSource.GetQueryCallback(){
             @Override
             public void getSuccess(String response) {
