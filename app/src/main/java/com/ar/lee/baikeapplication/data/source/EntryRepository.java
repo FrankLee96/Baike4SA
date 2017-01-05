@@ -1,7 +1,6 @@
 package com.ar.lee.baikeapplication.data.source;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.ar.lee.baikeapplication.data.Entry;
 import com.ar.lee.baikeapplication.data.EntryComment;
@@ -54,17 +53,22 @@ public class EntryRepository implements EntryDataSource{
     }
 
     @Override
-    public void register(@Nullable String username, @Nullable String passwd, @Nullable RegisterCallback callback) {
+    public void register(@NonNull String username, @NonNull String passwd, @NonNull RegisterCallback callback) {
         mRemoteDataSource.register(username,passwd,callback);
     }
 
     @Override
-    public void login(@Nullable String username, @Nullable String passwd, @Nullable LoginCallback callback) {
+    public void login(@NonNull String username, @NonNull String passwd, @NonNull LoginCallback callback) {
         mRemoteDataSource.login(username,passwd,callback);
     }
 
     @Override
-    public void getRecommendation(@Nullable GetRecommendationCallback callback) {
+    public void getRecommendation(@NonNull GetRecommendationCallback callback) {
         mRemoteDataSource.getRecommendation(callback);
+    }
+
+    @Override
+    public void getQuery(@NonNull String query_txt,@NonNull final GetQueryCallback callback) {
+        mRemoteDataSource.getQuery(query_txt,callback);
     }
 }

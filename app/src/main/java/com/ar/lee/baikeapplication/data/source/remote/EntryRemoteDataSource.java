@@ -1,7 +1,6 @@
 package com.ar.lee.baikeapplication.data.source.remote;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ar.lee.baikeapplication.BaikeApplication;
@@ -42,7 +41,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
     @Override
     public void getEntry(@NonNull final String entryId, @NonNull final GetEntryCallback callback) {
-        final MultipartRequest request = new MultipartRequest(URL+"/User/register/",
+        final MultipartRequest request = new MultipartRequest(URL+"/Item/get/",
                 new RequestCompleteListener<String>() {
                     @Override
                     public void onComplete(int stateCode, String response, String errMsg) {
@@ -209,7 +208,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void register(@Nullable final String username, @Nullable String passwd, @Nullable final RegisterCallback callback) {
+    public void register(@NonNull final String username, @NonNull String passwd, @NonNull final RegisterCallback callback) {
         final MultipartRequest request = new MultipartRequest(URL+"/User/register/",
                 new RequestCompleteListener<String>() {
                     @Override
@@ -242,7 +241,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void login(@Nullable final String username, @Nullable String passwd, @Nullable final LoginCallback callback) {
+    public void login(@NonNull final String username, @NonNull String passwd, @NonNull final LoginCallback callback) {
         final MultipartRequest request = new MultipartRequest(URL+"/User/login/",
                 new RequestCompleteListener<String>() {
                     @Override
@@ -274,7 +273,7 @@ public class EntryRemoteDataSource implements EntryDataSource{
     }
 
     @Override
-    public void getRecommendation(@Nullable final GetRecommendationCallback callback) {
+    public void getRecommendation(@NonNull final GetRecommendationCallback callback) {
         StringRequest request = new StringRequest(Request.HttpMethod.GET, URL+"/Item/recommend/", new RequestCompleteListener<String>() {
             @Override
             public void onComplete(int stateCode, String response, String errMsg) {
@@ -294,6 +293,38 @@ public class EntryRemoteDataSource implements EntryDataSource{
 
             }
         });
+        BaikeApplication.getRequestQueue().addRequest(request);
+    }
+
+    @Override
+    public void getQuery(@NonNull String query_txt,@NonNull final GetQueryCallback callback) {
+
+        final MultipartRequest request = new MultipartRequest(URL+"/Item/search/",
+                new RequestCompleteListener<String>() {
+                    @Override
+                    public void onComplete(int stateCode, String response, String errMsg){
+                        Log.d("test", response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            if(object.get("err").toString().equals("0")){
+                                callback.getSuccess(response);
+                            }else{
+                                callback.getFailure("搜索失败，失败代码 "+object.getString("err"));
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                            throw new RuntimeException("JSONException");
+                        }
+                    }
+                });
+        Map<String, String> map = request.getHeaders();
+        map.put("connection", "keep-alive");
+        map.put("Charset", "UTF-8");
+        map.put("Content-Type", "multipart/form-data"
+                + "; boundary=" + request.getMultiPartEntity().getBoundary());
+
+        MultipartEntity multipartEntity = request.getMultiPartEntity();
+        multipartEntity.addStringPart("title", query_txt);
         BaikeApplication.getRequestQueue().addRequest(request);
     }
 }

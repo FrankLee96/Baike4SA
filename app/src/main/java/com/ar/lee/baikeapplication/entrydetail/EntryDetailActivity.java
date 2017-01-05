@@ -7,13 +7,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.ar.lee.baikeapplication.R;
-import com.ar.lee.baikeapplication.addentry.AddEntryFragment;
 import com.ar.lee.baikeapplication.entrycomment.EntryCommentActivity;
 import com.ar.lee.baikeapplication.util.ActivityUtils;
 
@@ -47,8 +47,10 @@ public class EntryDetailActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     entryDetailFragment, R.id.content_entry_detail);
         }
-
-        new EntryDetailPresenter(entryDetailFragment);
+        Intent intent =getIntent();
+        String itemID = intent.getStringExtra("itemID");
+        Log.d("itemID",itemID);
+        new EntryDetailPresenter(entryDetailFragment,itemID);
     }
 
     @Override

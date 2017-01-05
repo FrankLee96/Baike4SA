@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ar.lee.baikeapplication.R;
 import com.ar.lee.baikeapplication.data.WordsBean;
@@ -35,6 +36,7 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
     private OnFragmentInteractionListener mListener;
     private Context context;
     private List<WordsBean> words_list=new ArrayList<>();
+    private TextView top_textView;
     public MainSearchFragment() {
         // Required empty public constructor
     }
@@ -68,6 +70,7 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
         View fragment;
         fragment =  inflater.inflate(R.layout.fragment_main_search, container, false);
         words_listView =(ListView) fragment.findViewById(R.id.words_listView);
+        top_textView = (TextView)fragment.findViewById(R.id.top_text);
         mPresenter.getRecommendation();
         return fragment;
     }
@@ -164,5 +167,15 @@ public class MainSearchFragment extends Fragment implements MainSearchContract.V
     @Override
     public void getRecommendationFailure(String code) {
         Snackbar.make(words_listView,code,Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void changeTextView(String txt) {
+        top_textView.setText(txt);
+    }
+
+    @Override
+    public void showErrMsg(String msg) {
+        Snackbar.make(words_listView,msg,Snackbar.LENGTH_LONG).show();
     }
 }

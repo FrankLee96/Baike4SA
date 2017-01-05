@@ -18,6 +18,8 @@ public interface MainSearchContract {
         void clearList();
         void onItemClicked(int position);
         void getRecommendationFailure(String code);
+        void changeTextView(String txt);
+        void showErrMsg(String msg);
     }
 
     interface Presenter extends BasePresenter{

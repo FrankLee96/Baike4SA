@@ -78,6 +78,13 @@ public interface EntryDataSource {
         void getFailure(String code);
     }
 
+    interface GetQueryCallback{
+
+        void getSuccess(String response);
+
+        void getFailure(String code);
+    }
+
 
 
     void getEntry(@NonNull String entryId, @NonNull GetEntryCallback callback);
@@ -95,4 +102,6 @@ public interface EntryDataSource {
     void register(@Nullable String username,@Nullable String passwd,@Nullable RegisterCallback callback);
 
     void getRecommendation(@Nullable GetRecommendationCallback callback);
+
+    void getQuery(@NonNull String query_txt,@NonNull final GetQueryCallback callback);
 }

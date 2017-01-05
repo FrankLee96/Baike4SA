@@ -1,6 +1,7 @@
 package com.ar.lee.baikeapplication.mainsearch;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ar.lee.baikeapplication.data.WordsBean;
 import com.ar.lee.baikeapplication.data.source.EntryDataSource;
@@ -45,12 +46,36 @@ public class MainSearchPresenter implements MainSearchContract.Presenter{
     @Override
     public void Query(String query_txt) {
         words_list.clear();
-       WordsBean word = new WordsBean("立顿","立顿”是全球最大的茶叶品牌。立顿的宗旨是光明," +
-                "活力和自然美好的乐趣。汤姆斯·立顿是这一品牌的创始人，1890年他正式在英国推出立顿","111");
-        for (int i = 0;i<5;++i){
-            words_list.add(word);
-        }
-        start();
+        Log.d("query_txt",query_txt);
+        mMainSearchView.changeTextView("查询结果:");
+//        WordsBean word = new WordsBean("111","立顿","立顿”是全球最大的茶叶品牌。立顿的宗旨是光明," +
+//                "活力和自然美好的乐趣。汤姆斯·立顿是这一品牌的创始人，1890年他正式在英国推出立顿");
+//        for (int i = 0;i<1;++i){
+//            words_list.add(word);
+//        }
+        EntryRepository.getInstance().getQuery(query_txt,new EntryDataSource.GetQueryCallback(){
+            @Override
+            public void getSuccess(String response) {
+                try{
+                    JSONObject object = new JSONObject(response);
+                    JSONArray word_array = new JSONArray(object.get("itemList").toString());
+                    for(int i=0;i<word_array.length();++i){
+                        WordsBean word = new WordsBean(word_array.getJSONObject(i).getString("itemID"),
+                                word_array.getJSONObject(i).getString("title"),
+                                word_array.getJSONObject(i).getString("text"));
+                        words_list.add(word);
+                    }
+                    refresh_listView();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void getFailure(String code) {
+                mMainSearchView.showErrMsg(code);
+            }
+        });
     }
 
     @Override
